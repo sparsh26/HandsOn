@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const DB = new Sequelize('learningmanagement', 'root', '', {
+const DB = new Sequelize('HandsOn', 'root', '', {
     host: 'localhost',
     dialect: 'sqlite',
     //port: 3000,
