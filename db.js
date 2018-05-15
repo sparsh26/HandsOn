@@ -1,14 +1,25 @@
 const Sequelize = require('sequelize')
-
-const DB = new Sequelize('Dbname', 'root', 'root', {
+const DB = new Sequelize('learningmanagement', 'root', '', {
     host: 'localhost',
     dialect: 'sqlite',
-    pool: {
-        min: 0,
-        max: 5
-    },
-    storage: './HandsOn.db'
-})
+    //port: 3000,
+    //pool: {
+    //    max: 5,
+    //  min: 0,
+    //acquire: 30000,
+    //idle: 10000 //To create fresh  connection if system is idle for 10000 sec
+    //}
+    logging: console.log() //This is by default value
+});
+
+DB
+    .authenticate()
+    .then(() => {
+        console.log('Connection has been established successfully.');
+    })
+    .catch(err => {
+        console.error('Unable to connect to the database:', err);
+    });
 
 /**
  *  Database Models
@@ -68,11 +79,11 @@ const Student = DB.define('students', {
     timestamps: false
 })
 
-const SubTeachMap = DB.define('sub-teach-map', {}, {
+const SubTeachMap = DB.define('subteachmap', {}, {
     timestamps: false
 })
 
-const StudentBatchMap = DB.define('student-batch-map', {}, {
+const StudentBatchMap = DB.define('studentbatchmap', {}, {
     timestamps: false
 })
 
@@ -103,26 +114,21 @@ Student.belongsToMany(Batch, {
     through: StudentBatchMap,
     timestamps: false
 })
-//one to one Lecture:Sub-teach-map
+
 
 
 /**
  * Database Sync
  */
+
 DB.sync()
-    .then(() => {
-        force: true
-        console.log('database has been synced')
+    .then(() =>{
+        force = false;
+        console.log("Database has been synced")
     })
-    .catch((err) => {
-        console.log("error syncing database " + err)
-    })
+    .catch((err) => console.error("Error creating database: " + err))
+
 
 module.exports = {
-    Course,
-    Batch,
-    Subject,
-    Teacher,
-    Lecture,
-    Student
+    Batch, Course, Student, Lecture, Teacher, Subject, SubTeachMap, StudentBatchMap
 }
